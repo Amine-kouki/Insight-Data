@@ -1,0 +1,15 @@
+# Virtual Environment
+venv/
+
+# API Key
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+
+# VS Code
+.vscode/
+
+# Mac
+.DS_Store
