@@ -17,25 +17,48 @@ def build_pdf_report(dataset_name, main_overview , data_head , report_cart):
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=letter, leftMargin=0.5*inch, rightMargin=0.5*inch, topMargin=0.75*inch, bottomMargin=0.75*inch,title=f"Data Analysis Report - {dataset_name}")
     styles = getSampleStyleSheet()
-    styles.add(ParagraphStyle(name='AnalysisText', parent=styles['Normal'], fontSize=12, alignment=TA_JUSTIFY, spaceAfter=6))
+    styles.add(ParagraphStyle(
+        name='MainTitle',
+        parent=styles['h1'],
+        fontName='Times-Bold',  # Use Times-Bold
+        fontSize=22,
+        spaceAfter=14
+    ))
+    styles.add(ParagraphStyle(
+        name='SectionTitle',
+        parent=styles['h2'],
+        fontName='Times-Bold',  # Use Times-Bold
+        fontSize=16,
+        spaceAfter=8
+    ))
+    
 
-    # Customize styles for better readability
-    styles['h1'].fontSize = 20
-    styles['h1'].spaceAfter = 14 
-    styles['h2'].fontSize = 16
-    styles['h2'].spaceAfter = 12
-    styles['Normal'].fontSize = 12
-    styles['Normal'].leading = 12
+    body_style = styles['BodyText']
+    body_style.fontName = 'Times-Roman'
+    body_style.fontSize = 12
+    body_style.leading = 15
+    body_style.alignment = TA_JUSTIFY
+    body_style.spaceAfter = 12
+
+    styles.add(ParagraphStyle(
+        name='AnalysisText',
+        parent=styles['Normal'],
+        fontName='Times-Roman', # Use Times-Roman
+        fontSize=11,            # Set font size to 11
+        leading=14,             # Set line spacing to 14
+        alignment=TA_JUSTIFY,
+        spaceAfter=12
+    ))
     
     story = []
 
-    story.append(Paragraph("Data Analysis Report", styles['h1']))
+    story.append(Paragraph("Data Analysis Report", styles['MainTitle']))
     
-    story.append(Paragraph(f"Dataset: {dataset_name}", styles['h2']))
+    story.append(Paragraph(f"Dataset: {dataset_name}", styles['SectionTitle']))
     story.append(Paragraph(markdown_to_pdf_html(main_overview), styles['Normal']))
     story.append(Spacer(1, 0.15*inch))  # Reduced space
     
-    story.append(Paragraph("Initial Data Snapshot:", styles['h2']))
+    story.append(Paragraph("Initial Data Snapshot:", styles['SectionTitle']))
     # For data snapshot, we'll use a special compact table style
     story.append(convert_df_to_table(data_head, is_snapshot=True))
     story.append(Spacer(1, 0.15*inch))  # Reduced space
@@ -44,7 +67,7 @@ def build_pdf_report(dataset_name, main_overview , data_head , report_cart):
     for item in report_cart:
         # Get a professional title from our new agent
         title = get_professionnal_title(item['query'])
-        story.append(Paragraph(title, styles['h2']))
+        story.append(Paragraph(title, styles['SectionTitle']))
         
         if item['type'] == 'plot':
             img = convert_plot_to_image(item['result'])
@@ -58,7 +81,7 @@ def build_pdf_report(dataset_name, main_overview , data_head , report_cart):
             
         elif item['type'] == 'value':
             value_text = str(item['result'])
-            story.append(Paragraph(value_text, styles['Normal']))
+            story.append(Paragraph(value_text, styles['BodyText']))
         
         story.append(Spacer(1, 0.15*inch))
         analysis_html = markdown_to_pdf_html(item['analysis'])
