@@ -15,7 +15,7 @@ from agent_logic.analysis_agent import get_professionnal_title
 def build_pdf_report(dataset_name, main_overview , data_head , report_cart):
     """Builds a PDF report from the provided components."""
     buffer = io.BytesIO()
-    doc = SimpleDocTemplate(buffer, pagesize=letter, leftMargin=0.5*inch, rightMargin=0.5*inch, topMargin=0.75*inch, bottomMargin=0.75*inch)
+    doc = SimpleDocTemplate(buffer, pagesize=letter, leftMargin=0.5*inch, rightMargin=0.5*inch, topMargin=0.75*inch, bottomMargin=0.75*inch,title=f"Data Analysis Report - {dataset_name}")
     styles = getSampleStyleSheet()
     styles.add(ParagraphStyle(name='AnalysisText', parent=styles['Normal'], fontSize=12, alignment=TA_JUSTIFY, spaceAfter=6))
 
