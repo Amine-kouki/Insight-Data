@@ -113,6 +113,20 @@ def main():
         except Exception as e:
             st.error(f"An error occurred: {e}")
 
+    with st.sidebar:
+        st.title("About")
+        st.markdown(
+            """
+            This app uses a Gemini AI agent to analyze your data.
+            Upload a CSV file, ask questions, and generate a PDF report of the findings.
+            """
+            "\n\n"
+            "connect with me:"
+            "\n[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?logo=linkedin)](https://www.linkedin.com/in/amine-kouki-org/)"
+            "\n\n"
+            "[![GitHub](https://img.shields.io/badge/GitHub-Profile-black?logo=github&logoColor=white)](https://github.com/Amine-kouki/Insight-Data)"
+        )
+        st.divider()
     st.sidebar.title("Report Builder 📄")
     st.sidebar.write(f"Items in report: {len(st.session_state.report_cart)}")
 
