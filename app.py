@@ -122,7 +122,7 @@ def main():
             """
             "\n\n"
             "connect with me:"
-            "[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/amine-kouki-org/)"
+            "[![LinkedIn](https://img.shields.io/badge/-LinkedIn-blue?logo=linkedin)](https://www.linkedin.com/in/amine-kouki-org/)"
             "\n\n"
             "[![GitHub](https://img.shields.io/badge/GitHub-Profile-black?logo=github&logoColor=white)](https://github.com/Amine-kouki/Insight-Data)"
         )
