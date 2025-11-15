@@ -272,7 +272,7 @@ This project was inspired by the need to make data analysis accessible to non-te
 
 <div align="center">
 
-**Built with ❤️ by [Amine Kouki](https://github.com/Amine-kouki)**
+**Built by [Amine Kouki](https://github.com/Amine-kouki)**
 
 [⭐ Star us on GitHub](https://github.com/Amine-kouki/Insight-Data) • [🐛 Report a Bug](https://github.com/Amine-kouki/Insight-Data/issues) • [💡 Request a Feature](https://github.com/Amine-kouki/Insight-Data/issues)
 
