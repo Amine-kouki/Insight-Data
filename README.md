@@ -19,7 +19,6 @@
 - [🧰 Tech Stack](#-tech-stack)
 - [📁 Project Structure](#-project-structure)
 - [🤝 Contributing](#-contributing)
-- [🧪 Development](#-development)
 - [📝 License](#-license)
 - [⭐ Acknowledgements](#-acknowledgements)
 
