@@ -1,4 +1,4 @@
-# 🧠 Insight-Data: AI-Powered Data Analysis Agent [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)]([https://your-app-url.streamlit.app](https://insight-data-hvcmh3jdckexqqkjmqnsbe.streamlit.app/))
+# 🧠 Insight-Data: AI-Powered Data Analysis Agent [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://insight-data-hvcmh3jdckexqqkjmqnsbe.streamlit.app/)
 
 [![Python Version](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
