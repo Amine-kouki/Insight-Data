@@ -8,7 +8,9 @@ import plotly.graph_objects as go
 import io
 from agent_logic.analysis_agent import (
     generate_pandas_code, 
-    generate_analysis
+    generate_overview_analysis,  # Replaces generate_analysis
+    generate_markdown_analysis,
+    generate_recommendations
 )
 from report_builder.pdf_generator import build_pdf_report
 
@@ -44,9 +46,17 @@ def main():
             st.info("🧠 Generating data overview...")
             overview_context = f"Data Head:\n{df.head().to_string()}\n\nData Types:\n{df.dtypes.to_string()}"
             overview_prompt = "What is this data about? Give a one-sentence summary."
-            overview = generate_analysis(overview_prompt, overview_context)
+            overview = generate_overview_analysis(overview_context)
             st.write(overview)
             
+            st.divider()
+
+
+            st.subheader("Recommendations")
+            recommendations = generate_recommendations(overview_context)
+            for rec in recommendations:
+                st.code(rec)
+
             st.divider()
 
             query = st.text_input(
@@ -83,9 +93,13 @@ def main():
                         if result is not None:
                             st.info("🧠 Generating chart analysis...")
                             analysis_context = str(result)
-                            analysis_prompt = f"Provide a professional analysis of these results in the context of the following query: '{query}'. Include specific data points and business implications."
-                            analysis = generate_analysis(analysis_prompt, analysis_context)
-                            st.write(analysis)
+                            analysis_prompt = query
+
+                            analysis = generate_markdown_analysis(
+                                prompt_question=analysis_prompt,
+                                data_context=analysis_context
+                            )
+                            st.write(analysis, unsafe_allow_html=True)
 
                             if st.button("Add to Report 🛒", key=query):
                                 item_type = "data"
@@ -140,8 +154,7 @@ def main():
             
             df_head = st.session_state.df.head()
             overview_context = f"Data Head:\n{st.session_state.df.head().to_string()}\n\nData Types:\n{st.session_state.df.dtypes.to_string()}"
-            overview_prompt = "What is this data about? Give a summary don't use markdown  "
-            main_overview = generate_analysis(overview_prompt, overview_context)
+            main_overview = generate_overview_analysis(overview_context)
 
             pdf_bytes = build_pdf_report(
                 dataset_name=uploaded_file.name if uploaded_file else "Uploaded Data",

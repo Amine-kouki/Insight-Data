@@ -18,7 +18,7 @@ CRITICAL RULES:
 - DO NOT output any explanation, markdown, or 'print()'. ONLY the code.
 - **Pandas Update:** For time-series frequencies, use 'ME' (month-end), not the old 'M'.
 
-EExample 1 (Data):
+Example 1 (Data):
 Query: "Show the first 5 rows"
 Code:
 result = df.head()

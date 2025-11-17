@@ -1,6 +1,7 @@
 import google.generativeai as genai
 import streamlit as st
 import os
+import ast
 from .prompts import SYSTEM_PROMPT # The '.' means import from the same folder
 
 
@@ -63,45 +64,98 @@ def get_professionnal_title(query):
         return f"Error generating title: {e}"
     
     
-    
 @st.cache_data
-def generate_analysis(prompt_question,data_context):
+def generate_overview_analysis(data_context):
     """
-    A simple agent that takes a question and data,
-    and returns a text-based analysis.
+    Agent 1: Generates the simple, 2-3 sentence overview summary.
     """
     model = genai.GenerativeModel(
         'gemini-flash-latest',
-        system_instruction="You are an expert data analyst creating professional business reports with clear, structured analysis."
+        system_instruction="You are a data analyst writing a brief dataset summary."
     )
+    
     full_prompt = f"""
-        You are a professional data analyst writing a key insight for a business report.
-        A user asked: "{prompt_question}"
-        Here is the data:
-        ---
-        {data_context}
-        ---
-        Based ONLY on this data, write a professional analysis using the following template.
+    Here is the head of a dataset:
+    ---
+    {data_context}
+    ---
+    Based ONLY on this data, write a 2-3 sentence summary of what this dataset is about.
 
-        CRITICAL RULES:
-        - You MUST use the exact headings below in your response.
-        - You MUST use markdown (like **bold** or bullet points).
-        - DO NOT suggest new queries, future prompts, or 'Future Analysis Suggestions'.
-
-        ### Key Finding
-        (Start with a single **bolded sentence** that states the most important insight.)
-
-        ### Detailed Analysis
-        (Write 1-2 paragraphs explaining *why* this insight is true, referencing the data.)
-
-        ### Business Impact
-        (Write 1-2 bullet points explaining what this insight means for a business.)
-        ### Recommendations
-        (if this is the over view wrap each bullet point im going to ask to generate later in st.code() don't put any code just the text else don't put them in st.code() : write 2-3 bullet points with suggested data visualuals based on the dataset exact columns to explore next to deepen the analysis.)
-        """
+    CRITICAL RULES:
+    - DO NOT use markdown, headings, or bullet points.
+    - DO NOT suggest any "Future Prompts" or "Recommendations".
+    - Just write the plain text summary paragraph.
+    """
     try:
         response = model.generate_content(full_prompt)
         return response.text
     except Exception as e:
         return f"Error analyzing data: {e}"
 
+@st.cache_data
+def generate_markdown_analysis(prompt_question, data_context):
+    """
+    Agent 2: Generates the detailed, structured analysis for a report item.
+    """
+    model = genai.GenerativeModel(
+        'gemini-flash-latest', # 
+        system_instruction="You are a professional data analyst writing a key insight for a business report."
+    )
+    
+    full_prompt = f"""
+    A user asked: "{prompt_question}"
+    Here is the data/chart result:
+    ---
+    {data_context}
+    ---
+    Based ONLY on this data, write a professional analysis using the following template.
+
+    CRITICAL RULES:
+    - You MUST use the exact headings below: ### Key Finding, ### Detailed Analysis, ### Business Impact
+    - You MUST use markdown (like **bold** or bullet points).
+    - DO NOT suggest new queries, future prompts, or 'Recommendations'.
+
+    ### Key Finding
+    (Start with a single **bolded sentence**.)
+
+    ### Detailed Analysis
+    (Write 1-2 paragraphs explaining the data.)
+
+    ### Business Impact
+    (Write 1-2 bullet points.)
+    """
+    try:
+        response = model.generate_content(full_prompt)
+        return response.text
+    except Exception as e:
+        return f"Error analyzing data: {e}"
+    
+    import ast # Add 'import ast' to the top of analysis_agent.py
+
+@st.cache_data
+def generate_recommendations(data_context):
+    """
+    Agent 3: Generates a list of 3 suggested follow-up queries.
+    """
+    model = genai.GenerativeModel(
+        'gemini-flash-latest',
+        system_instruction="You are a helpful assistant suggesting new data analysis queries."
+    )
+    
+    full_prompt = f"""
+    Here is the head of a dataset:
+    ---
+    {data_context}
+    ---
+    Based on these columns, generate 3 interesting follow-up questions.
+    
+    CRITICAL RULES:
+    - Return ONLY a Python list of strings.
+    - Example: ['What is the total sales?', 'Plot sales by region']
+    """
+    try:
+        response = model.generate_content(full_prompt)
+        # Safely convert the AI's string output into a real Python list
+        return ast.literal_eval(response.text)
+    except Exception as e:
+        return [f"Error generating recommendations: {e}"]
